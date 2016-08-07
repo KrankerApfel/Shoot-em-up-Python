@@ -1,0 +1,16 @@
+Structure Platformer test |
+---------------------------
+
+► __init__(self)
+► new(self)
+► run(self)
+► update(self)
+► events(self)
+► draw(self)
+► show_splashscreen(self)
+► show_endscreen(self)
+► menu(self)
+► press_key(self)
+► draw_text(self, text, size, color, x, y)
+► fadeout_text(self,background, text, size, color, x , y, delay)
+► fadeout_img(self,image, x , y, delay)

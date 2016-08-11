@@ -27,13 +27,23 @@ class Game :
       def new(self) :
           # Creer une partie (creation des objets)
           self.all_sprites = pg.sprite.Group()
+          self.mobs_list = pg.sprite.Group() ## mobs = tout objets mobile non jouables
           self.player = Player()
+          ## Liste de tout les spawn point du jeu
+          ## un y negatif permet de laisser un temps d'apparition
+          ## a faire --> automatise a partir d'un fichier text
+          ## pour eviter de prendre de la place
+          self.Spawn_point("triangle",droite-25,0,-2)
+          self.Spawn_point("solo",droite-25,-500,-2)
+          self.Spawn_point("solo",0,-500,2)
+          self.Spawn_point("diagonal",droite-40,-1550,-2)
+          self.Spawn_point("lineaire",width/2,-1500,0)
+
           self.pannel = Driver_pannel()
           for i in range (8):
               self.meteor = Meteor()
               self.all_sprites.add(self.meteor)
-              meteor_list = pg.sprite.Group()
-              meteor_list.add(self.meteor)
+              self.mobs_list.add(self.meteor)
 
           self.all_sprites.add(self.player,self.pannel)
           self.run()
@@ -66,7 +76,7 @@ class Game :
                 keys = pg.key.get_pressed()
                 if keys[pg.K_SPACE]:
                     self.player.tir(self)
-                    #shoot.play()
+                    shoot.play()
 
           pass
 
@@ -80,9 +90,8 @@ class Game :
       def show_splashscreen(self):
         # Affichage de la splashscreen
         beat.play()
-        self.fadeout_img(logo,0,0,3000)
-        self.fadeout_text(BLACK,"Un jeu amateur",40,WHITE, width/2, height/2,4000)
-        self.fadeout_text(BLACK,credits,15,WHITE, width/2, height/2,4000)
+        self.fadeout_img(logo,0,0,3000,BLACK)
+        self.fadeout_text(BLACK,"Un jeu amateur",40,WHITE, width/2, height/2,3000)
         self.press_key()
         pass
 
@@ -93,7 +102,9 @@ class Game :
       def menu(self):
           self.screen.fill(background_color)
           self.draw_text(title, 40, WHITE, width/2 ,  height/4 )
-          self.draw_text("Appuie sur une touche", 15, WHITE, width/2 ,  height/2 )
+          self.draw_text("Appuie sur une touche", 18, WHITE, width/2 ,  height/2 )
+          self.draw_text("(c) Les Studios LaPomme / code : Tom LaPomme / musique : Anate Y / Graphisme : Clement Chroma, Doreen, Henijay", 15, WHITE, width/2.85 ,  height -40 )
+          self.draw_text("Avec les voix de BlueTroelix, Floriant Soret et Branlito", 15, WHITE, width/5 ,  height -30 )
           pg.display.flip()
           self.press_key()
           pass
@@ -110,6 +121,28 @@ class Game :
                 if event.type == pg.KEYUP:
                     waiting = False
 
+      def Spawn_ennemie(self,x,y,vx,vy):
+         self.ennemie = Ennemie(self.player,self,x,y,vx,vy)
+         self.all_sprites.add(self.ennemie)
+         self.mobs_list.add(self.ennemie)
+
+      def Spawn_point(self,formation,x,y,vx):
+
+              if formation =="triangle" :
+                 self.Spawn_ennemie(x,y,vx,1)
+                 self.Spawn_ennemie(x+25,y+30,vx,1)
+                 self.Spawn_ennemie(x+50,y,vx,1)
+              if formation =="lineaire" :
+                 self.Spawn_ennemie(x,y,vx,1)
+                 self.Spawn_ennemie(x+25,y,vx,1)
+                 self.Spawn_ennemie(x+50,y,vx,1)
+              if formation =="diagonal":
+                 self.Spawn_ennemie(x,y,vx,1)
+                 self.Spawn_ennemie(x+25,y+30,vx,1)
+                 self.Spawn_ennemie(x+50,y+60,vx,1)
+              if formation =="solo" :
+                 self.Spawn_ennemie(x,y,vx,1)
+
       def draw_text(self, text, size, color, x, y):
         # Affichage d'un texte a l'ecran
         font = pg.font.Font(self.font_name, size)
@@ -123,15 +156,12 @@ class Game :
           self.screen.fill(background)
           self.draw_text(text, size, color, x , y )
           pg.time.delay (delay)
-          for i in range(255):
-               self.screen.set_alpha(255-i)
           pg.display.flip()
 
-      def fadeout_img(self,image, x , y, delay) :
+      def fadeout_img(self,image, x , y, delay,background) :
+          self.screen.fill(background)
           self.screen.blit(image,(x,y))
           pg.time.delay (delay)
-          for i in range(255):
-               self.screen.set_alpha(255-i)
           pg.display.flip()
 
 
@@ -139,7 +169,7 @@ class Game :
 
 
 g = Game()
-#g.show_splashscreen()
+##g.show_splashscreen()
 g.menu()
 while g.running:
       g.new()

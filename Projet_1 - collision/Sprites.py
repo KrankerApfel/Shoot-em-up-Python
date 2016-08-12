@@ -35,6 +35,7 @@ class Player(pg.sprite.Sprite):
         self.vx  = 0
         self.vy  = 0
         self.life = player_life
+        self.score = score
         self.groups = group
 
     def update(self):
@@ -42,13 +43,13 @@ class Player(pg.sprite.Sprite):
         self.vy = 0
         keys = pg.key.get_pressed()
         if keys[pg.K_LEFT]:
-            self.vx= -5
+            self.vx= -10
         if keys[pg.K_RIGHT]:
-            self.vx = 5
+            self.vx = 10
         if keys[pg.K_UP]:
-            self.vy = -5
+            self.vy = -10
         if keys[pg.K_DOWN]:
-            self.vy = 5
+            self.vy = 10
 
         self.rect.x += self.vx
         self.rect.y += self.vy
@@ -90,6 +91,8 @@ class Bullet(pg.sprite.Sprite) :
 
       def update(self) :
           self.rect.y += self.speed
+          if self.rect.y < 0 or self.rect.y > height + 6 :
+             self.kill()
 
 
 class Ennemie(pg.sprite.Sprite) :
@@ -109,15 +112,18 @@ class Ennemie(pg.sprite.Sprite) :
 
 
       def update(self):
-          self.cadence += 1
-          if self.cadence >= cadence_ennemie :
-             self.cadence = 0
-             self.tir(self.game,self.groups)
+
           if self.rect.y < 0 :
              self.rect.y += 1
+             self.cadence = 0
           else :
                   self.rect.x += self.vx
                   self.rect.y += self.vy
+                  self.cadence += 1
+                  if self.cadence >= cadence_ennemie :
+                     self.cadence = 0
+                     self.tir(self.game,self.groups)
+
           if self.rect.top > height + self.rect.width or self.rect.left < - self.rect.width or self.rect.right >  droite + 50:
               self.kill()
 
@@ -145,7 +151,7 @@ class Meteor(pg.sprite.Sprite) :
          if self.rect.top > height + 10 or self.rect.left < -25 or self.rect.right >  droite + 35:
                 self.rect.x = random.randrange(width - self.rect.width)
                 self.rect.y = random.randrange(-100, -40)
-                self.vy = random.randrange(1, 8)
+                self.vy = random.randrange(1, 3)
 
 
 class Driver_pannel(pg.sprite.Sprite) :

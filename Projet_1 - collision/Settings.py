@@ -26,21 +26,31 @@ beat   = pg.mixer.Sound(path_asset('Audio/BGS/heartbeat.wav'))
 shoot   = pg.mixer.Sound(path_asset('Audio/BGS/select.wav'))
 
 # --- Game option settings ---
+
+# system
 width  = 1200
 height = 500
 fps    = 60
 font   = 'handmeds'
-
+# screen game
 droite = width/1.5
-player_bullet_size = (3, 6)
-ennemie_bullet_size = (5, 10)
-meteor_size = (30, 30)
-ennemie_size = (25,30)
-nb_ennemies = 2
-cadence_ennemie = 25
-player_initial_pos = (width / 2, height / 1.2)
+score = 0
 
-player_life = 2000
+# player
+player_bullet_size = (3, 6)
+player_initial_pos = (width / 2, height / 1.2)
+player_life = 1000
+
+# mobs
+
+ennemie_bullet_size = (5, 10)
+ennemie_size = (25,30)
+cadence_ennemie = 30
+point_ennemies = 50 ## points gagne pour un ennemi tue
+
+meteor_size = (30, 30)
+point_meteor = 8   ## points gagne pour un meteor tue
+
 
 
 # --- Colors ---
@@ -51,4 +61,12 @@ YELLOW           = (255,255,0)
 RED              = (255,0,0)
 
 # --- Vocabulary ---
-title   = 'Shoot em up Test'
+TITLE        = 'Shoot em up Test'
+ENTER        = "appuie sur une touche"
+CREDIT_1 = "(c) Les Studios LaPomme / code : Tom LaPomme / musique : Anate Y / Graphisme : Clement Chroma, Doreen, Henijay"
+CREDIT_2 = "Avec les voix de BlueTroelix, Floriant Soret et Branlito"
+
+LIFE         = "Vie : "
+SCORE        = "Score : "
+SHIELD_POWER = "Energie bouclier"
+GAME_OVER    = "Mission echoue, vous etes mort"
